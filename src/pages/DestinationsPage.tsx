@@ -4,8 +4,8 @@ import { Search } from 'lucide-react';
 import { useState } from 'react';
 
 const allDestinations = [
-  { name: 'Serengeti National Park, Tanzania', image: 'https://images.unsplash.com/photo-1534408641153-2c10553c6d72?w=800&h=600&fit=crop' },
-  { name: 'Maasai Mara National Reserve, Kenya', image: 'https://images.unsplash.com/photo-1588112353383-34759a4b86b4?w=800&h=600&fit=crop' },
+  { name: 'Serengeti National Park, Tanzania', image: 'https://share.google/images/GDTyTuJY1ik8jRcVt?w=800&h=600&fit=crop' },
+  { name: 'Maasai Mara National Reserve, Kenya', image: 'https://share.google/images/0GnMV73bwJ2XQ9Jbr?w=800&h=600&fit=crop' },
   { name: 'Kruger National Park, South Africa', image: 'https://images.unsplash.com/photo-1549688133-5b48b5a48d54?w=800&h=600&fit=crop' },
   { name: 'Okavango Delta, Botswana', image: 'https://images.unsplash.com/photo-1589995549239-a41681a81254?w=800&h=600&fit=crop' },
   { name: 'Bwindi Impenetrable National Park, Uganda', image: 'https://images.unsplash.com/photo-1566453880341-a8a5f3e4905a?w=800&h=600&fit=crop' },
