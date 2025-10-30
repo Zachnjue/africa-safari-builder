@@ -2,22 +2,24 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ImageWithFallback } from '@/components/ui/image-with-fallback';
 import { ArrowRight } from 'lucide-react';
+import { externalImages } from '@/assets/placeholders';
 
 const featuredDestinations = [
   {
     name: 'Serengeti, Tanzania',
-    image: 'https://images.unsplash.com/photo-1534408641153-2c10553c6d72?w=800&h=600&fit=crop',
+    image: 'https://www.tanzaniatourism.com/images/uploads/Serengeti_Gnus_7765.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
     description: 'Home to the Great Migration, vast plains, and incredible wildlife density.'
   },
   {
     name: 'Maasai Mara, Kenya',
-    image: 'https://images.unsplash.com/photo-1588112353383-34759a4b86b4?w=800&h=600&fit=crop',
+    image: 'https://www.kenyasafari.com/images/great-migration-masai-mara-kenya-590x390.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
     description: 'Iconic landscapes and abundant predators. A photographer\'s paradise.'
   },
   {
     name: 'Okavango Delta, Botswana',
-    image: 'https://images.unsplash.com/photo-1589995549239-a41681a81254?w=800&h=600&fit=crop',
+    image: 'https://images.theconversation.com/files/298349/original/file-20191023-119438-prx01q.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=crop?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
     description: 'A unique wetland ecosystem teeming with life, best explored by mokoro.'
   }
 ];
@@ -43,7 +45,7 @@ export function HomePage() {
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-[70vh] md:h-[90vh] text-white flex items-center justify-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1617933902332-3433a3a79590?q=80&w=2070&auto=format&fit=crop')" }}
+        style={{ backgroundImage: `url('${externalImages.heroBackground}')` }}
       >
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         <div className="relative z-10 text-center px-4">
@@ -65,7 +67,7 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredDestinations.map((dest) => (
               <Card key={dest.name} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <img src={dest.image} alt={dest.name} className="w-full h-56 object-cover" />
+                <ImageWithFallback src={dest.image} alt={dest.name} className="w-full h-56 object-cover" />
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold mb-2 text-gray-900 dark:text-white">{dest.name}</h3>
                   <p className="text-gray-600 dark:text-gray-400">{dest.description}</p>

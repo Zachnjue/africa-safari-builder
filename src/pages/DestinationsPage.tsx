@@ -1,21 +1,22 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { ImageWithFallback } from '@/components/ui/image-with-fallback';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
 
 const allDestinations = [
-  { name: 'Serengeti National Park, Tanzania', image: 'https://images.unsplash.com/photo-1534408641153-2c10553c6d72?w=800&h=600&fit=crop' },
-  { name: 'Maasai Mara National Reserve, Kenya', image: 'https://images.unsplash.com/photo-1588112353383-34759a4b86b4?w=800&h=600&fit=crop' },
-  { name: 'Kruger National Park, South Africa', image: 'https://images.unsplash.com/photo-1549688133-5b48b5a48d54?w=800&h=600&fit=crop' },
-  { name: 'Okavango Delta, Botswana', image: 'https://images.unsplash.com/photo-1589995549239-a41681a81254?w=800&h=600&fit=crop' },
-  { name: 'Bwindi Impenetrable National Park, Uganda', image: 'https://images.unsplash.com/photo-1566453880341-a8a5f3e4905a?w=800&h=600&fit=crop' },
-  { name: 'Victoria Falls, Zambia/Zimbabwe', image: 'https://images.unsplash.com/photo-1550963322-27f4212a2a51?w=800&h=600&fit=crop' },
-  { name: 'Ngorongoro Crater, Tanzania', image: 'https://images.unsplash.com/photo-1519659528534-7fd733a832a0?w=800&h=600&fit=crop' },
-  { name: 'Etosha National Park, Namibia', image: 'https://images.unsplash.com/photo-1547471080-7cc2d5d88e93?w=800&h=600&fit=crop' },
-  { name: 'Sossusvlei, Namibia', image: 'https://images.unsplash.com/photo-1617950531235-037a8b83674a?w=800&h=600&fit=crop' },
-  { name: 'Mount Kilimanjaro, Tanzania', image: 'https://images.unsplash.com/photo-1589553400763-9185a0c10f0e?w=800&h=600&fit=crop' },
-  { name: 'Giza Pyramids, Egypt', image: 'https://images.unsplash.com/photo-1528992494131-79a0335b2361?w=800&h=600&fit=crop' },
-  { name: 'Marrakech, Morocco', image: 'https://images.unsplash.com/photo-1569926833532-35870b2848c4?w=800&h=600&fit=crop' },
+  { name: 'Serengeti National Park, Tanzania', image: 'https://www.tanzaniatourism.com/images/uploads/Serengeti_Gnus_7765.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Maasai Mara National Reserve, Kenya', image: 'https://www.kenyasafari.com/images/great-migration-masai-mara-kenya-590x390.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Kruger National Park, South Africa', image: 'https://i.ytimg.com/vi/EUQ3QhLzTyk/maxresdefault.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Okavango Delta, Botswana', image: 'https://images.theconversation.com/files/298349/original/file-20191023-119438-prx01q.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Bwindi Impenetrable National Park, Uganda', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFsYiaHRyWl2CVuOvwaBC-kdgohngIEaJXRw&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Victoria Falls, Zambia/Zimbabwe', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrg6-TOL6GcnOK2Ri3iZwSw5pISWSQvXkkxg&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Ngorongoro Crater, Tanzania', image: 'https://nomadicessentialstravel.com/wp-content/uploads/2024/09/03-DAYS-TANZANIA-SAFARI-EXPLORE-THE-SERENGETI-AND-NGORONGORO-CRATER.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Etosha National Park, Namibia', image: 'https://i.ytimg.com/vi/iY06mtGUVSA/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLB8zuAKqVV1NEjtnEeSstFZRZuX9A?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Sossusvlei, Namibia', image: 'https://www.sossusvlei.org/wp-content/uploads/2021/02/Aerial-view-guest-area-andBeyond-Sossusvlei-e1613674179629-600x400.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Mount Kilimanjaro, Tanzania', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRadT1zNVbM31hihd_IMTpJFzRRMBLQRY1vJQ&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Giza Pyramids, Egypt', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaMbr5GUwjG_jaHGshH_n8Jy-ahibnUKdqLQ&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
+  { name: 'Marrakech, Morocco', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQh7sq-j98CK0-KqcFboh-C23FHzlUSYkmnA&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
 ];
 
 export function DestinationsPage() {
@@ -47,11 +48,10 @@ export function DestinationsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {filteredDestinations.map((dest) => (
           <Card key={dest.name} className="overflow-hidden group relative">
-            <img
+            <ImageWithFallback
               src={dest.image}
               alt={dest.name}
               className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
-              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
             <CardContent className="absolute bottom-0 left-0 p-4">

@@ -1,11 +1,16 @@
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { ImageWithFallback } from '@/components/ui/image-with-fallback';
 import { toast } from 'sonner';
-import { Camera } from 'lucide-react';
+import { Camera, LogOut } from 'lucide-react';
+import { externalImages } from '@/assets/placeholders';
+import { supabase } from '@/lib/supabaseClient';
 
 const interests = [
   { id: 'wildlife', label: 'Wildlife & Safari' },
@@ -17,6 +22,30 @@ const interests = [
 ];
 
 export function ProfilePage() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
+
+  // ✅ Fetch current user from Supabase
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        navigate('/signin');
+      } else {
+        setUser(user);
+      }
+    };
+    fetchUser();
+  }, [navigate]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast.success('You have been logged out.');
+    navigate('/signin');
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast.promise(new Promise(resolve => setTimeout(resolve, 1500)), {
@@ -26,15 +55,30 @@ export function ProfilePage() {
     });
   };
 
+  if (!user) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-gray-600 dark:text-gray-300">Loading your profile...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-gray-50 dark:bg-gray-950/90">
+    <div className="bg-gray-50 dark:bg-gray-950/90 min-h-screen">
       <div className="container mx-auto max-w-5xl py-12 px-4">
         {/* Profile Header */}
         <div className="relative mb-12">
-          <div className="h-48 md:h-64 bg-cover bg-center rounded-lg" style={{backgroundImage: "url('https://images.unsplash.com/photo-1519659528534-7fd733a832a0?w=1200&h=400&fit=crop')"}}></div>
+          <div
+            className="h-48 md:h-64 bg-cover bg-center rounded-lg"
+            style={{ backgroundImage: `url('${externalImages.profileBackground}')` }}
+          ></div>
           <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
             <div className="relative">
-              <img className="h-24 w-24 rounded-full border-4 border-white dark:border-gray-900 object-cover" src="https://i.pravatar.cc/150?u=jelani" alt="Jelani Maina" />
+              <ImageWithFallback
+                className="h-24 w-24 rounded-full border-4 border-white dark:border-gray-900 object-cover"
+                src={user.user_metadata?.avatar_url || `https://i.pravatar.cc/150?u=${user.email}`}
+                alt={user.user_metadata?.full_name || user.email}
+              />
               <Button variant="outline" size="icon" className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full">
                 <Camera className="h-4 w-4" />
               </Button>
@@ -43,8 +87,14 @@ export function ProfilePage() {
         </div>
 
         <div className="text-center pt-8 mb-12">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Jelani Maina</h1>
-          <p className="text-gray-500 dark:text-gray-400">Nairobi, Kenya</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {user.user_metadata?.full_name || 'Traveler'}
+          </h1>
+          <p className="text-gray-500 dark:text-gray-400">{user.email}</p>
+          <Button onClick={handleLogout} variant="destructive" className="mt-4">
+            <LogOut className="w-4 h-4 mr-2" />
+            Logout
+          </Button>
         </div>
 
         <Card>
@@ -57,11 +107,11 @@ export function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="fullName">Full Name</Label>
-                  <Input id="fullName" defaultValue="Jelani Maina" />
+                  <Input id="fullName" defaultValue={user.user_metadata?.full_name || ''} />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" defaultValue="jelani@example.com" readOnly />
+                  <Input id="email" type="email" defaultValue={user.email} readOnly />
                 </div>
               </div>
 
@@ -70,7 +120,9 @@ export function ProfilePage() {
                 <div className="space-y-2">
                   <Label htmlFor="travelStyle">Preferred Travel Style</Label>
                   <Select>
-                    <SelectTrigger id="travelStyle"><SelectValue placeholder="Select your style" /></SelectTrigger>
+                    <SelectTrigger id="travelStyle">
+                      <SelectValue placeholder="Select your style" />
+                    </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="budget">Budget-friendly</SelectItem>
                       <SelectItem value="balanced">Balanced</SelectItem>
