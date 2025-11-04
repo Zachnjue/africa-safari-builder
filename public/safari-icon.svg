@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="32" fill="#2D5016"/>
+
+  <!-- Safari vehicle body -->
+  <rect x="16" y="30" width="32" height="12" rx="2" fill="#D4A574"/>
+
+  <!-- Vehicle roof/canopy -->
+  <path d="M 20 30 L 22 22 L 42 22 L 44 30 Z" fill="#8B6F47"/>
+
+  <!-- Roof support poles -->
+  <rect x="23" y="22" width="1.5" height="8" fill="#5C4A33"/>
+  <rect x="39.5" y="22" width="1.5" height="8" fill="#5C4A33"/>
+
+  <!-- Windshield -->
+  <rect x="24" y="24" width="7" height="6" rx="1" fill="#87CEEB" opacity="0.6"/>
+
+  <!-- Side window -->
+  <rect x="34" y="24" width="8" height="6" rx="1" fill="#87CEEB" opacity="0.6"/>
+
+  <!-- Front wheel -->
+  <circle cx="24" cy="42" r="4" fill="#2C2C2C"/>
+  <circle cx="24" cy="42" r="2" fill="#666666"/>
+
+  <!-- Back wheel -->
+  <circle cx="40" cy="42" r="4" fill="#2C2C2C"/>
+  <circle cx="40" cy="42" r="2" fill="#666666"/>
+
+  <!-- Front bumper -->
+  <rect x="14" y="32" width="2" height="6" rx="1" fill="#8B6F47"/>
+
+  <!-- Headlight -->
+  <circle cx="15" cy="35" r="1" fill="#FFE484"/>
+
+  <!-- Spare tire on back -->
+  <circle cx="48" cy="35" r="3" fill="#2C2C2C"/>
+  <circle cx="48" cy="35" r="1.5" fill="#666666"/>
+</svg>

@@ -2,43 +2,84 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ImageWithFallback } from '@/components/ui/image-with-fallback';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabaseClient';
+import { toast } from 'sonner';
 
-const allDestinations = [
-  { name: 'Serengeti National Park, Tanzania', image: 'https://www.tanzaniatourism.com/images/uploads/Serengeti_Gnus_7765.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Maasai Mara National Reserve, Kenya', image: 'https://www.kenyasafari.com/images/great-migration-masai-mara-kenya-590x390.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Kruger National Park, South Africa', image: 'https://i.ytimg.com/vi/EUQ3QhLzTyk/maxresdefault.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Okavango Delta, Botswana', image: 'https://images.theconversation.com/files/298349/original/file-20191023-119438-prx01q.jpg?ixlib=rb-4.1.0&q=45&auto=format&w=754&fit=clip?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Bwindi Impenetrable National Park, Uganda', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFsYiaHRyWl2CVuOvwaBC-kdgohngIEaJXRw&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Victoria Falls, Zambia/Zimbabwe', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrg6-TOL6GcnOK2Ri3iZwSw5pISWSQvXkkxg&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Ngorongoro Crater, Tanzania', image: 'https://nomadicessentialstravel.com/wp-content/uploads/2024/09/03-DAYS-TANZANIA-SAFARI-EXPLORE-THE-SERENGETI-AND-NGORONGORO-CRATER.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Etosha National Park, Namibia', image: 'https://i.ytimg.com/vi/iY06mtGUVSA/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLB8zuAKqVV1NEjtnEeSstFZRZuX9A?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Sossusvlei, Namibia', image: 'https://www.sossusvlei.org/wp-content/uploads/2021/02/Aerial-view-guest-area-andBeyond-Sossusvlei-e1613674179629-600x400.jpg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Mount Kilimanjaro, Tanzania', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRadT1zNVbM31hihd_IMTpJFzRRMBLQRY1vJQ&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Giza Pyramids, Egypt', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaMbr5GUwjG_jaHGshH_n8Jy-ahibnUKdqLQ&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-  { name: 'Marrakech, Morocco', image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQh7sq-j98CK0-KqcFboh-C23FHzlUSYkmnA&s?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop' },
-];
+interface Destination {
+  id: string;
+  name: string;
+  image_url: string;
+  country: string;
+  description?: string;
+  is_featured: boolean;
+}
 
 export function DestinationsPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const filteredDestinations = allDestinations.filter(dest =>
-    dest.name.toLowerCase().includes(searchTerm.toLowerCase())
+  // Fetch destinations from Supabase
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('destinations')
+          .select('*')
+          .order('is_featured', { ascending: false })
+          .order('name', { ascending: true });
+
+        if (error) throw error;
+        setDestinations(data || []);
+      } catch (error: any) {
+        console.error('Error fetching destinations:', error);
+        toast.error('Failed to load destinations', {
+          description: error.message
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  const filteredDestinations = destinations.filter(dest =>
+    dest.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    dest.country.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleDestinationClick = (destinationName: string) => {
+    navigate('/build-trip', { state: { destination: destinationName } });
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-700 font-semibold">Loading destinations...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 py-12 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 min-h-screen">
       <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white">Explore Our Destinations</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-300 mt-2 max-w-2xl mx-auto">Discover the heart of Africa. From the vast plains of the Serengeti to the vibrant markets of Marrakech.</p>
+        <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent drop-shadow-lg">Explore Our Destinations</h1>
+        <p className="text-lg text-gray-700 font-semibold mt-2 max-w-2xl mx-auto">Discover the heart of Africa. From the vast plains of the Serengeti to the vibrant markets of Marrakech.</p>
       </div>
 
       <div className="mb-8 max-w-lg mx-auto">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-500" />
           <Input
             placeholder="Search for a destination (e.g., Kenya, Serengeti)..."
-            className="pl-10"
+            className="pl-10 border-4 border-orange-300 focus:border-green-400 shadow-lg rounded-xl text-lg font-medium bg-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -46,20 +87,45 @@ export function DestinationsPage() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-        {filteredDestinations.map((dest) => (
-          <Card key={dest.name} className="overflow-hidden group relative">
-            <ImageWithFallback
-              src={dest.image}
-              alt={dest.name}
-              className="w-full h-80 object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-            <CardContent className="absolute bottom-0 left-0 p-4">
-              <h3 className="text-lg font-bold text-white">{dest.name}</h3>
-            </CardContent>
-          </Card>
-        ))}
+        {filteredDestinations.map((dest, index) => {
+          const borderColors = [
+            'border-orange-400',
+            'border-green-400',
+            'border-amber-400',
+            'border-emerald-400',
+            'border-rose-400',
+            'border-teal-400'
+          ];
+          return (
+            <Card
+              key={dest.name}
+              className={`overflow-hidden group relative cursor-pointer hover:shadow-2xl transition-all duration-300 transform hover:scale-105 ${borderColors[index % borderColors.length]} border-8 rounded-2xl`}
+              onClick={() => handleDestinationClick(dest.name)}
+            >
+              <ImageWithFallback
+                src={dest.image_url}
+                alt={dest.name}
+                className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+              {dest.is_featured && (
+                <div className="absolute top-2 right-2 bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  Featured
+                </div>
+              )}
+              <CardContent className="absolute bottom-0 left-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent w-full">
+                <h3 className="text-2xl font-extrabold text-white drop-shadow-lg">{dest.name}</h3>
+                <p className="text-sm text-white font-bold mt-1 drop-shadow-md">✨ Click to build your trip</p>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
+
+      {filteredDestinations.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-600 text-lg">No destinations found matching your search.</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,6 +20,8 @@ type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || '/profile';
 
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
@@ -46,9 +48,10 @@ export function SignUpPage() {
     } else {
       console.log('Signup success:', result);
       toast.success('Account created successfully!', {
-        description: 'Redirecting you to your profile...',
+        description: 'Complete your profile to continue...',
       });
-      setTimeout(() => navigate('/profile'), 2000);
+      // Always go to profile, but pass along the intended destination
+      setTimeout(() => navigate('/profile', { state: { from } }), 2000);
     }
   };
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -23,7 +23,9 @@ const interests = [
 
 export function ProfilePage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState<any>(null);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   // ✅ Fetch current user from Supabase
   useEffect(() => {
@@ -35,10 +37,13 @@ export function ProfilePage() {
         navigate('/signin');
       } else {
         setUser(user);
+        // Check if this is a new user (from signup with redirect intent)
+        const fromPath = location.state?.from;
+        setIsNewUser(!!fromPath);
       }
     };
     fetchUser();
-  }, [navigate]);
+  }, [navigate, location]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -46,13 +51,17 @@ export function ProfilePage() {
     navigate('/signin');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.promise(new Promise(resolve => setTimeout(resolve, 1500)), {
+    const redirectPath = isNewUser ? '/build-trip' : '/destinations';
+    const redirectMessage = isNewUser ? 'Redirecting to trip builder...' : 'Redirecting to destinations...';
+
+    await toast.promise(new Promise(resolve => setTimeout(resolve, 1500)), {
       loading: 'Saving your preferences...',
-      success: 'Profile updated successfully!',
+      success: `Profile updated successfully! ${redirectMessage}`,
       error: 'Failed to update profile.',
     });
+    setTimeout(() => navigate(redirectPath), 1000);
   };
 
   if (!user) {
