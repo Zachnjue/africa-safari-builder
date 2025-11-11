@@ -12,6 +12,7 @@ import { AdminDestinationsPage } from './pages/AdminDestinationsPage';
 import { AdminActivitiesPage } from './pages/AdminActivitiesPage';
 import { AdminAccommodationPage } from './pages/AdminAccommodationPage';
 import { AdminTransportationPage } from './pages/AdminTransportationPage';
+import { AdminHotelsPage } from './pages/AdminHotelsPage';
 import { Toaster } from 'sonner';
 
 function App() {
@@ -31,11 +32,20 @@ function App() {
             <Route path="/admin/destinations" element={<AdminDestinationsPage />} />
             <Route path="/admin/activities" element={<AdminActivitiesPage />} />
             <Route path="/admin/accommodation" element={<AdminAccommodationPage />} />
+            <Route path="/admin/hotels" element={<AdminHotelsPage />} />
             <Route path="/admin/transportation" element={<AdminTransportationPage />} />
           </Routes>
         </main>
         <Footer />
-        <Toaster position="top-right" richColors />
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          duration={5000}
+          toastOptions={{
+            className: 'cursor-pointer',
+          }}
+        />
       </div>
     </Router>
   );

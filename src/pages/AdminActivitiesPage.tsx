@@ -170,7 +170,7 @@ export function AdminActivitiesPage() {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-amber-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-teal-600 mx-auto mb-4"></div>
           <p className="text-gray-700 font-semibold">Loading activities...</p>
         </div>
       </div>
@@ -181,7 +181,7 @@ export function AdminActivitiesPage() {
   const inactiveActivities = activities.filter(a => !a.is_active);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-green-50 to-cyan-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -194,8 +194,8 @@ export function AdminActivitiesPage() {
               Back to Dashboard
             </Button>
             <div className="flex items-center gap-3">
-              <Ticket className="w-10 h-10 text-amber-600" />
-              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-amber-600 to-yellow-600 bg-clip-text text-transparent">
+              <Ticket className="w-10 h-10 text-teal-600" />
+              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-teal-600 to-green-600 bg-clip-text text-transparent">
                 Manage Activities
               </h1>
             </div>
@@ -203,7 +203,7 @@ export function AdminActivitiesPage() {
           </div>
           <Button
             onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white shadow-lg"
+            className="bg-gradient-to-r from-teal-500 to-green-500 hover:from-teal-600 hover:to-green-600 text-white shadow-lg"
           >
             <Plus className="w-5 h-5 mr-2" />
             Add New Activity
@@ -212,14 +212,14 @@ export function AdminActivitiesPage() {
 
         {/* Active Activities */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-amber-700">Active Activities ({activeActivities.length})</h2>
+          <h2 className="text-2xl font-bold mb-4 text-teal-700">Active Activities ({activeActivities.length})</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeActivities.map((activity) => (
-              <Card key={activity.id} className="border-4 border-amber-200 hover:border-amber-400 transition-all">
+              <Card key={activity.id} className="border-4 border-teal-200 hover:border-teal-400 transition-all">
                 <CardHeader>
                   <CardTitle className="text-lg">{activity.name}</CardTitle>
                   {activity.category && (
-                    <span className="inline-block px-2 py-1 text-xs bg-amber-100 text-amber-800 rounded-full">
+                    <span className="inline-block px-2 py-1 text-xs bg-teal-100 text-teal-800 rounded-full">
                       {activity.category}
                     </span>
                   )}
@@ -229,7 +229,7 @@ export function AdminActivitiesPage() {
                     <p className="text-sm text-gray-600">{activity.description}</p>
                   )}
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-amber-600">
+                    <span className="text-2xl font-bold text-teal-600">
                       ${activity.price_per_person}
                     </span>
                     <span className="text-sm text-gray-500">/person</span>
@@ -405,7 +405,7 @@ export function AdminActivitiesPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600"
+                  className="bg-gradient-to-r from-teal-500 to-green-500 hover:from-teal-600 hover:to-green-600"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   {editingId ? 'Update' : 'Add'} Activity

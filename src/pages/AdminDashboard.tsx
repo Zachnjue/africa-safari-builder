@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabaseClient';
 import { toast } from 'sonner';
-import { MapPin, Ticket, BedDouble, Plane, BarChart3, Settings } from 'lucide-react';
+import { MapPin, Ticket, BedDouble, Plane, BarChart3, Settings, Hotel } from 'lucide-react';
 
 export function AdminDashboard() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ export function AdminDashboard() {
     destinations: 0,
     activities: 0,
     accommodations: 0,
+    hotels: 0,
     transports: 0
   });
 
@@ -34,10 +35,11 @@ export function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const [destResult, actResult, accomResult, transResult] = await Promise.all([
+      const [destResult, actResult, accomResult, hotelsResult, transResult] = await Promise.all([
         supabase.from('destinations').select('id', { count: 'exact', head: true }),
         supabase.from('activities').select('id', { count: 'exact', head: true }),
         supabase.from('accommodation_types').select('id', { count: 'exact', head: true }),
+        supabase.from('hotels').select('id', { count: 'exact', head: true }),
         supabase.from('transport_options').select('id', { count: 'exact', head: true })
       ]);
 
@@ -45,6 +47,7 @@ export function AdminDashboard() {
         destinations: destResult.count || 0,
         activities: actResult.count || 0,
         accommodations: accomResult.count || 0,
+        hotels: hotelsResult.count || 0,
         transports: transResult.count || 0
       });
     } catch (error: any) {
@@ -80,8 +83,8 @@ export function AdminDashboard() {
       description: 'Manage activities and their pricing',
       icon: Ticket,
       count: stats.activities,
-      color: 'from-amber-500 to-yellow-500',
-      borderColor: 'border-amber-400',
+      color: 'from-teal-500 to-green-500',
+      borderColor: 'border-teal-400',
       route: '/admin/activities'
     },
     {
@@ -89,9 +92,18 @@ export function AdminDashboard() {
       description: 'Manage lodging types and prices',
       icon: BedDouble,
       count: stats.accommodations,
-      color: 'from-orange-500 to-red-500',
-      borderColor: 'border-orange-400',
+      color: 'from-cyan-500 to-red-500',
+      borderColor: 'border-cyan-400',
       route: '/admin/accommodation'
+    },
+    {
+      title: 'Hotels',
+      description: 'Manage individual hotels and properties',
+      icon: Hotel,
+      count: stats.hotels,
+      color: 'from-rose-500 to-pink-500',
+      borderColor: 'border-rose-400',
+      route: '/admin/hotels'
     },
     {
       title: 'Transportation',
@@ -105,7 +117,7 @@ export function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-cyan-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
         {/* Header */}
         <div className="mb-12">
@@ -121,7 +133,7 @@ export function AdminDashboard() {
         </div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
           {adminCards.map((card) => {
             const Icon = card.icon;
             return (
@@ -167,7 +179,7 @@ export function AdminDashboard() {
             <CardDescription>Common administrative tasks</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <Button
                 variant="outline"
                 className="h-auto py-4 flex flex-col items-center gap-2"
@@ -181,7 +193,7 @@ export function AdminDashboard() {
                 className="h-auto py-4 flex flex-col items-center gap-2"
                 onClick={() => navigate('/admin/activities')}
               >
-                <Ticket className="w-6 h-6 text-amber-600" />
+                <Ticket className="w-6 h-6 text-teal-600" />
                 <span>Add Activity</span>
               </Button>
               <Button
@@ -189,8 +201,16 @@ export function AdminDashboard() {
                 className="h-auto py-4 flex flex-col items-center gap-2"
                 onClick={() => navigate('/admin/accommodation')}
               >
-                <BedDouble className="w-6 h-6 text-orange-600" />
+                <BedDouble className="w-6 h-6 text-cyan-600" />
                 <span>Update Pricing</span>
+              </Button>
+              <Button
+                variant="outline"
+                className="h-auto py-4 flex flex-col items-center gap-2"
+                onClick={() => navigate('/admin/hotels')}
+              >
+                <Hotel className="w-6 h-6 text-rose-600" />
+                <span>Add Hotel</span>
               </Button>
               <Button
                 variant="outline"

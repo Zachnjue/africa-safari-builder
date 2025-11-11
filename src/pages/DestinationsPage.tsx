@@ -76,10 +76,10 @@ export function DestinationsPage() {
 
       <div className="mb-8 max-w-lg mx-auto">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-orange-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-cyan-500" />
           <Input
             placeholder="Search for a destination (e.g., Kenya, Serengeti)..."
-            className="pl-10 border-4 border-orange-300 focus:border-green-400 shadow-lg rounded-xl text-lg font-medium bg-white"
+            className="pl-10 border-4 border-cyan-300 focus:border-green-400 shadow-lg rounded-xl text-lg font-medium bg-white"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -89,9 +89,9 @@ export function DestinationsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {filteredDestinations.map((dest, index) => {
           const borderColors = [
-            'border-orange-400',
+            'border-cyan-400',
             'border-green-400',
-            'border-amber-400',
+            'border-teal-400',
             'border-emerald-400',
             'border-rose-400',
             'border-teal-400'
@@ -108,7 +108,7 @@ export function DestinationsPage() {
                 className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-300"
               />
               {dest.is_featured && (
-                <div className="absolute top-2 right-2 bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                <div className="absolute top-2 right-2 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                   Featured
                 </div>
               )}

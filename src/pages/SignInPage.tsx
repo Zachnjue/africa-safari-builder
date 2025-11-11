@@ -35,8 +35,8 @@ export function SignInPage() {
         if (error) {
             toast.error('Sign-in failed!', { description: error.message });
         } else {
-            toast.success('Welcome back!', { description: 'Redirecting to your profile...' });
-            setTimeout(() => navigate('/profile'), 2000);
+            toast.success('Welcome back!', { description: 'Taking you to the home page...' });
+            setTimeout(() => navigate('/'), 2000);
         }
     };
 

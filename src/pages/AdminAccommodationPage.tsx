@@ -187,7 +187,7 @@ export function AdminAccommodationPage() {
     return (
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-orange-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-cyan-600 mx-auto mb-4"></div>
           <p className="text-gray-700 font-semibold">Loading accommodation types...</p>
         </div>
       </div>
@@ -198,7 +198,7 @@ export function AdminAccommodationPage() {
   const inactiveAccommodations = accommodations.filter(a => !a.is_active);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-red-50 to-pink-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-red-50 to-pink-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -211,8 +211,8 @@ export function AdminAccommodationPage() {
               Back to Dashboard
             </Button>
             <div className="flex items-center gap-3">
-              <BedDouble className="w-10 h-10 text-orange-600" />
-              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+              <BedDouble className="w-10 h-10 text-cyan-600" />
+              <h1 className="text-4xl font-extrabold bg-gradient-to-r from-cyan-600 to-red-600 bg-clip-text text-transparent">
                 Manage Accommodation
               </h1>
             </div>
@@ -220,7 +220,7 @@ export function AdminAccommodationPage() {
           </div>
           <Button
             onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white shadow-lg"
+            className="bg-gradient-to-r from-cyan-500 to-red-500 hover:from-blue-600 hover:to-red-600 text-white shadow-lg"
           >
             <Plus className="w-5 h-5 mr-2" />
             Add New Type
@@ -229,10 +229,10 @@ export function AdminAccommodationPage() {
 
         {/* Active Accommodations */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4 text-orange-700">Active Accommodation Types ({activeAccommodations.length})</h2>
+          <h2 className="text-2xl font-bold mb-4 text-cyan-700">Active Accommodation Types ({activeAccommodations.length})</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {activeAccommodations.map((accommodation) => (
-              <Card key={accommodation.id} className="border-4 border-orange-200 hover:border-orange-400 transition-all">
+              <Card key={accommodation.id} className="border-4 border-cyan-200 hover:border-blue-400 transition-all">
                 <CardHeader>
                   <CardTitle className="text-lg">{accommodation.name}</CardTitle>
                   <code className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{accommodation.slug}</code>
@@ -242,7 +242,7 @@ export function AdminAccommodationPage() {
                     <p className="text-sm text-gray-600">{accommodation.description}</p>
                   )}
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-orange-600">
+                    <span className="text-2xl font-bold text-cyan-600">
                       ${accommodation.price_per_night}
                     </span>
                     <span className="text-sm text-gray-500">/night per person</span>
@@ -252,7 +252,7 @@ export function AdminAccommodationPage() {
                       <p className="text-xs font-semibold text-gray-700 mb-1">Amenities:</p>
                       <div className="flex flex-wrap gap-1">
                         {accommodation.amenities.slice(0, 3).map((amenity, index) => (
-                          <span key={index} className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full flex items-center gap-1">
+                          <span key={index} className="text-xs bg-cyan-100 text-cyan-700 px-2 py-1 rounded-full flex items-center gap-1">
                             <Check className="w-3 h-3" />
                             {amenity}
                           </span>
@@ -435,7 +435,7 @@ export function AdminAccommodationPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                  className="bg-gradient-to-r from-cyan-500 to-red-500 hover:from-blue-600 hover:to-red-600"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   {editingId ? 'Update' : 'Add'} Accommodation

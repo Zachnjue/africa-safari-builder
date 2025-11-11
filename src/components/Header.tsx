@@ -41,7 +41,7 @@ export function Header() {
   ] : [];
 
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-orange-400 via-amber-400 to-green-400 backdrop-blur-sm border-b-4 border-white shadow-xl">
+    <header className="sticky top-0 z-50 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 backdrop-blur-sm border-b-4 border-white shadow-xl">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-2 transform hover:scale-110 transition-transform duration-300">
@@ -57,8 +57,8 @@ export function Header() {
                 className={({ isActive }) =>
                   `text-base font-bold transition-all duration-300 ${
                     isActive
-                      ? 'text-white bg-orange-600 px-4 py-2 rounded-full shadow-lg transform scale-110'
-                      : 'text-white hover:text-orange-900 hover:bg-white/20 px-4 py-2 rounded-full'
+                      ? 'text-white bg-blue-600 px-4 py-2 rounded-full shadow-lg transform scale-110'
+                      : 'text-white hover:text-cyan-900 hover:bg-white/20 px-4 py-2 rounded-full'
                   }`
                 }
               >
@@ -96,7 +96,7 @@ export function Header() {
                 <Button variant="ghost" asChild className="text-white hover:bg-white/20 font-bold border-2 border-white">
                   <Link to="/signin">Sign In</Link>
                 </Button>
-                <Button asChild className="bg-white text-orange-600 hover:bg-orange-100 font-bold shadow-lg transform hover:scale-105 transition-all duration-300">
+                <Button asChild className="bg-white text-blue-600 hover:bg-blue-100 font-bold shadow-lg transform hover:scale-105 transition-all duration-300">
                   <Link to="/signup">Sign Up</Link>
                 </Button>
               </>
@@ -113,7 +113,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-gradient-to-br from-orange-300 to-amber-300 absolute w-full border-b-4 border-white pb-4 shadow-2xl">
+        <div className="md:hidden bg-gradient-to-br from-cyan-300 to-teal-300 absolute w-full border-b-4 border-white pb-4 shadow-2xl">
           <nav className="flex flex-col items-center space-y-4 pt-4">
             {[...navLinks, ...adminLinks].map(link => (
               <NavLink 

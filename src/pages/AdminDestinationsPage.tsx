@@ -347,7 +347,7 @@ export function AdminDestinationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-cyan-50 py-12">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -379,7 +379,7 @@ export function AdminDestinationsPage() {
                   }}
                 />
                 {dest.is_featured && (
-                  <div className="absolute top-2 right-2 bg-amber-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                  <div className="absolute top-2 right-2 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-bold">
                     Featured
                   </div>
                 )}

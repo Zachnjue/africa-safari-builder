@@ -61,8 +61,18 @@ export function HomePage() {
     }
   };
 
+  const handleDestinationClick = (destinationName: string) => {
+    if (!user) {
+      // If not authenticated, redirect to sign up first
+      navigate('/signup', { state: { destination: destinationName } });
+    } else {
+      // If authenticated, go directly to trip builder with destination pre-selected
+      navigate('/build-trip', { state: { destination: destinationName } });
+    }
+  };
+
   return (
-    <div className="bg-gradient-to-br from-orange-50 via-yellow-50 to-green-50">
+    <div className="bg-gradient-to-br from-blue-50 via-cyan-50 to-green-50">
       {/* Hero Section */}
       <section
         className="relative bg-cover bg-center h-[70vh] md:h-[90vh] text-white flex items-center justify-center"
@@ -74,7 +84,7 @@ export function HomePage() {
           <p className="text-lg md:text-2xl mb-8 max-w-3xl mx-auto drop-shadow-2xl font-semibold bg-black/30 px-6 py-3 rounded-xl backdrop-blur-sm">Instantly design, price, and book your bespoke safari adventure.</p>
           <Button
             size="lg"
-            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white"
+            className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-white shadow-2xl transform hover:scale-105 transition-all duration-300 border-2 border-white"
             onClick={handleStartBuilding}
           >
             Start Building Your Trip <ArrowRight className="ml-2 h-5 w-5" />
@@ -92,17 +102,21 @@ export function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredDestinations.map((dest, index) => {
               const badgeColors = [
-                'bg-orange-500',
+                'bg-blue-500',
                 'bg-green-500',
-                'bg-amber-500'
+                'bg-cyan-500'
               ];
               const borderColors = [
-                'border-orange-400',
+                'border-blue-400',
                 'border-green-400',
-                'border-amber-400'
+                'border-cyan-400'
               ];
               return (
-                <Card key={dest.name} className={`overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 ${borderColors[index]} border-4`}>
+                <Card
+                  key={dest.name}
+                  className={`overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105 ${borderColors[index]} border-4 cursor-pointer`}
+                  onClick={() => handleDestinationClick(dest.name)}
+                >
                   <div className="relative">
                     <ImageWithFallback src={dest.image} alt={dest.name} className="w-full h-56 object-cover brightness-100" />
                     <div className={`absolute top-0 left-0 ${badgeColors[index]} text-white px-4 py-2 rounded-br-lg font-bold shadow-lg`}>
@@ -111,7 +125,11 @@ export function HomePage() {
                   </div>
                   <CardContent className="p-6 bg-white">
                     <h3 className="text-xl font-bold mb-2 text-gray-900">{dest.name}</h3>
-                    <p className="text-gray-700 font-medium">{dest.description}</p>
+                    <p className="text-gray-700 font-medium mb-3">{dest.description}</p>
+                    <p className="text-sm text-cyan-600 font-semibold flex items-center gap-1">
+                      Click to start planning your trip
+                      <ArrowRight className="h-4 w-4" />
+                    </p>
                   </CardContent>
                 </Card>
               );
@@ -121,20 +139,20 @@ export function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-br from-amber-100 via-orange-50 to-rose-100">
+      <section className="py-16 md:py-24 bg-gradient-to-br from-cyan-100 via-blue-50 to-green-100">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-orange-600 to-rose-600 bg-clip-text text-transparent">What Our Adventurers Say</h2>
+            <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">What Our Adventurers Say</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {testimonials.map((testimonial, index) => (
-              <Card key={testimonial.name} className={`${index === 0 ? 'bg-gradient-to-br from-orange-100 to-amber-100' : 'bg-gradient-to-br from-green-100 to-emerald-100'} border-l-8 border-${index === 0 ? 'orange' : 'green'}-500 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}>
+              <Card key={testimonial.name} className={`${index === 0 ? 'bg-gradient-to-br from-blue-100 to-cyan-100' : 'bg-gradient-to-br from-green-100 to-emerald-100'} border-l-8 border-${index === 0 ? 'blue' : 'green'}-500 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105`}>
                 <CardContent className="p-6">
                   <p className="text-gray-800 font-medium italic mb-4 text-lg">"{testimonial.quote}"</p>
                   <div className="flex items-center">
                     <Avatar className="ring-4 ring-white shadow-lg">
                       <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                      <AvatarFallback className="bg-gradient-to-br from-orange-400 to-amber-400 text-white font-bold">{testimonial.name.charAt(0)}</AvatarFallback>
+                      <AvatarFallback className="bg-gradient-to-br from-cyan-400 to-teal-400 text-white font-bold">{testimonial.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="ml-4">
                       <p className="font-bold text-gray-900">{testimonial.name}</p>
